@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -24,23 +25,43 @@ public class BookService {
     }
 
     @Transactional
-    public void addBook(Book book, Category category){
+    public void save(Book book) {
+        book.setCategory(categoryRepository.findById(book.getCategory().getId()).orElse(null));
+        bookRepository.save(book);
+
+    }
+
+    public void addBook(Book book, Category category) {
         bookRepository.save(book);
         categoryRepository.save(category);
+    }
+
+    public List<Book> findAll() {
+        return StreamSupport.stream(bookRepository.findAll().spliterator(),
+                false).collect(Collectors.toList());
+
     }
 
     public Iterable<Book> getBooks() {
         return bookRepository.findAll();
     }
 
-    public List<Book> findAll() {
-        return StreamSupport.stream(bookRepository.findAll().spliterator(),
-                false).collect(Collectors.toList());
+    public Optional<Book> findById(Long bookId) {
+        return bookRepository.findById(bookId);
     }
 
-    @Transactional
-    public void save(Book book) {
-        book.setCategory(categoryRepository.findById(book.getCategory().getCategoryId()).orElse(null));
-        bookRepository.save(book);
+    public boolean bookExists(String bookName) {
+        Book bookExisting = bookRepository.findByBookName(bookName);
+        return bookExisting != null;
+    }
+
+    public void createBook(Book book) {
+        Book bookToBeSaved = new Book();
+        bookToBeSaved.setBookName(book.getBookName());
+        bookToBeSaved.setAuthorName(book.getAuthorName());
+        bookToBeSaved.setDescription(book.getDescription());
+        bookToBeSaved.setCategory(book.getCategory());
+        bookRepository.save(bookToBeSaved);
     }
 }
+

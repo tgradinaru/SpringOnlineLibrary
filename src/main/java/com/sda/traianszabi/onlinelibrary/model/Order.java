@@ -5,39 +5,49 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "order_library")
+@Table(name = "orders")
 public class Order {
     //public UserService userService;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "order_id")
-    private Long orderId;
+    @Column(name = "orderId")
+    private Long id;
 
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToMany
-   // @JoinColumn(name = "book_id")
+    @JoinTable(
+            name = "book_orders",
+            joinColumns = {@JoinColumn(name = "orderId")},
+            inverseJoinColumns = {@JoinColumn(name = "bookId")}
+    )
     private List<Book> books;
 
     @Column(name = "order_date")
     private Date orderDate;
 
-    public Order(){}
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
+    private OrderStatus orderStatus;
 
-    public Order(User user, List<Book> books, Date orderDate) {
+    public Order() {
+    }
+
+    public Order(User user, List<Book> books, Date orderDate, OrderStatus orderStatus) {
         this.user = user;
         this.books = books;
         this.orderDate = orderDate;
+        this.orderStatus = orderStatus;
     }
 
-    public Long getOrderId() {
-        return orderId;
+    public Long getId() {
+        return id;
     }
 
-    public void setOrderId(Long orderId) {
-        this.orderId = orderId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public User getUser() {
@@ -64,14 +74,11 @@ public class Order {
         this.orderDate = orderDate;
     }
 
-    @Override
-    public String toString() {
-        return "Order{" +
-                "orderId=" + orderId +
-                ", user=" + user +
-                ", orderDate=" + orderDate +
-                '}';
+    public OrderStatus getOrderStatus() {
+        return orderStatus;
     }
 
-
+    public void setOrderStatus(OrderStatus orderStatus) {
+        this.orderStatus = orderStatus;
+    }
 }

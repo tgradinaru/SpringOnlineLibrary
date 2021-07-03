@@ -23,7 +23,7 @@ public class User {
     private String email;
 
     @OneToOne
-    @JoinColumn(name = "account_id")
+    @JoinColumn(name = "id")
     private LibraryAccount libraryAccount;
 
     public Long getId() {

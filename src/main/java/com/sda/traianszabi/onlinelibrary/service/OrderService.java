@@ -15,16 +15,14 @@ public class OrderService{
 
     private final OrderRepository orderRepository;
 
-
     public OrderService(OrderRepository orderRepository) {
         this.orderRepository = orderRepository;
-
     }
 
     @Transactional
     public void addOrder(Order order) {
         orderRepository.save(order);
-
     }
+
     public Iterable<Order> getOrders(){ return orderRepository.findAll();}
 }

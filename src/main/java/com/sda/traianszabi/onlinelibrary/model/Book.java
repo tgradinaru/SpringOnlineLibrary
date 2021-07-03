@@ -2,18 +2,17 @@ package com.sda.traianszabi.onlinelibrary.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.Date;
 
 @Entity
 @Table(name = "book")
 public class Book {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long isbn;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "bookId")
+    private Long id;
 
     @NotBlank
     @Size(min = 1, max = 1000)
@@ -30,8 +29,8 @@ public class Book {
     @Column(name = "description")
     private String description;
 
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="release_Date")
+    //@GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "release_Date")
     private Timestamp releaseDate;
 
 
@@ -39,12 +38,12 @@ public class Book {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    public Long getIsbn() {
-        return isbn;
+    public Long getId() {
+        return id;
     }
 
-    public void setIsbn(Long isbn) {
-        this.isbn = isbn;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getBookName() {
@@ -87,13 +86,13 @@ public class Book {
         this.releaseDate = Timestamp.from(Instant.now());
     }
 
-    @Override
+/*    @Override
     public String toString() {
         return "Book{" +
-                "isbn=" + isbn +
+                "id=" + id +
                 ", bookName='" + bookName + '\'' +
                 ", authorName='" + authorName + '\'' +
                 ", description='" + description + '\'' +
                 '}';
-    }
+    }*/
 }
